@@ -38,11 +38,16 @@ const MORSE_TABLE = {
 };
 
 function decode(expr) {
-    return morseCode.split('   ').map(
-            elem => elem.split(' ').map(
-                    item => ref[item]
-                ).join('')
-    ).join(' ');
+    const dash = expr.match(/.{1,10}/g).map(i => i.match(/.{1,2}/g)).map(it => {
+        const arr = [];
+        it.forEach(item => {
+            if(item === '10') arr.push('.');
+            if(item === '11') arr.push('-');
+        });
+        return arr.join('');
+    });
+    const result = dash.map(i => i === '' ? ' ' : MORSE_TABLE[i]).join('');
+    return result;
 }
 
 module.exports = {
